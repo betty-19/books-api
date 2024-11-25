@@ -5,7 +5,9 @@ const bookRoutes = require('./routes/books');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-DB_URI=process.env.DB_URI;
+DB_URI=process.env.DB_URI || 'mongodb+srv://admin:admin12345678@devapi.8f6gg.mongodb.net/booksdb';
+
+
 
 
 
