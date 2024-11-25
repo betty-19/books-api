@@ -16,11 +16,31 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { title, author, isbn, publishedYear } = req.body;
 
+  if (typeof title !== 'string' || title.trim() === '') {
+    return res.status(400).json({ message: 'Title must be a non-empty string' });
+  }
+  if (typeof author !== 'string' || author.trim() === '') {
+    return res.status(400).json({ message: 'Author must be a non-empty string' });
+  }
+  
+  if (!Number.isInteger(publishedYear) || publishedYear <= 0) {
+    return res.status(400).json({ message: 'Published Year must be a positive integer' });
+  }
+  const currentYear = new Date().getFullYear();
+  if (publishedYear > currentYear) {
+    return res.status(400).json({ message: 'Published Year cannot be in the future' });
+  }
+
+
   if (!title || !author ||  !isbn || !publishedYear) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   try {
+    const existingBook = await Book.findOne({ isbn });
+    if (existingBook) {
+      return res.status(400).json({ message: 'A book with this ISBN already exists' });
+    }
     const book = new Book(req.body);
     await book.save();
     res.status(201).json(book);
