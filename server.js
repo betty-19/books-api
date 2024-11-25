@@ -5,7 +5,8 @@ const bookRoutes = require('./routes/books');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const DB_URI = process.env.DB_URI || 'mongodb://localhost:27017/booksdb';
+DB_URI=process.env.DB_URI || 'mongodb+srv://admin:admin12345678@devapi.8f6gg.mongodb.net'
+
 
 
 
@@ -14,7 +15,7 @@ app.use('/books', bookRoutes);
 
 
 mongoose
-  .connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(DB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
